@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Subject — Class 10Edu</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="page-layout">
+  <aside class="sidebar" id="sb"></aside>
+  <main class="main-area">
+    <header class="header">
+      <h1 id="subjName"></h1>
+      <p id="subjDesc" style="color:var(--ink-secondary)"></p>
+    </header>
+
+    <div class="dashboard-grid" id="chGrid">
+      <!-- Chapters will be populated by JS -->
+    </div>
+  </main>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/security.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  const sid = App.getParam('id');
+  if(!sid) { window.location.href = 'dashboard.html'; return; }
+  
+  App.initPage(sid);
+  const data = await App.loadData();
+  const subj = data.subjects.find(s => s.id === sid);
+  if(!subj) { window.location.href = 'dashboard.html'; return; }
+
+  document.getElementById('subjName').textContent = subj.name;
+  document.getElementById('subjDesc').textContent = subj.description;
+
+  const grid = document.getElementById('chGrid');
+  grid.innerHTML = subj.chapters.map(ch => `
+    <a href="chapter.html?subject=${sid}&chapter=${ch.id}" class="content-card">
+      <h3 style="font-size:1.1rem">${VidyaSec.sanitize(ch.title)}</h3>
+      <p style="color:var(--ink-secondary);font-size:0.9rem;margin-top:8px">Module ${ch.id}</p>
+    </a>
+  `).join('');
+});
+</script>
+
+</body>
+</html>

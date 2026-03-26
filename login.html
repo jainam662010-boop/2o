@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Login — Class 10Edu</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--bg); }
+.login-box { max-width: 450px; width: 100%; text-align: center; }
+.role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 32px; }
+.role-card { padding: 32px; text-align: center; cursor: pointer; }
+.role-card .icon { font-size: 3rem; margin-bottom: 16px; display: block; }
+</style>
+</head>
+<body class="login-screen">
+
+<div class="login-box">
+  <div class="brand-logo" style="justify-content:center;padding-bottom:24px">
+    <div class="logo-gem">V</div>
+    <h1 class="logo-text">Class 10Edu</h1>
+  </div>
+  <p style="color:var(--ink-secondary)">Select your role to access the learning dashboard.</p>
+
+  <div class="role-grid">
+    <div class="content-card role-card" onclick="selectRole('student')">
+      <span class="icon">🎓</span>
+      <h3>Student</h3>
+    </div>
+    <div class="content-card role-card" onclick="selectRole('teacher')">
+      <span class="icon">👨‍🏫</span>
+      <h3>Teacher</h3>
+    </div>
+  </div>
+</div>
+
+<script>
+function selectRole(role) {
+  localStorage.setItem('vm_user_role', role);
+  window.location.href = 'dashboard.html';
+}
+</script>
+
+</body>
+</html>

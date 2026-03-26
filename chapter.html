@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chapter — Class 10Edu</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.video-player { background: #000; border-radius: var(--r-lg); margin-bottom: 24px; aspect-ratio: 16/9; }
+.content-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+.content-item { text-align: center; padding: 24px; cursor: pointer; }
+.content-item .icon { font-size: 2.5rem; margin-bottom: 12px; display: block; }
+</style>
+</head>
+<body>
+
+<div class="page-layout">
+  <aside class="sidebar" id="sb"></aside>
+  <main class="main-area">
+    <header class="header">
+      <h1 id="chTitle"></h1>
+      <p id="chMeta" style="color:var(--ink-secondary)"></p>
+    </header>
+
+    <div class="video-player" id="videoWrap">
+      <!-- YouTube iframe will be loaded here -->
+    </div>
+
+    <h2 style="margin-top:40px;margin-bottom:20px">Chapter Resources</h2>
+    <div class="content-grid" id="contentOptions">
+      <!-- Content options will be populated by JS -->
+    </div>
+  </main>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/security.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  const sid = App.getParam('subject');
+  const cid = App.getParam('chapter');
+  App.initPage(sid);
+
+  const data = await App.loadData();
+  const subj = data.subjects.find(s => s.id === sid);
+  const ch = subj?.chapters.find(c => c.id === cid);
+
+  if (!ch) { window.location.href = 'dashboard.html'; return; }
+
+  document.getElementById('chTitle').textContent = ch.title;
+  document.getElementById('chMeta').textContent = `${subj.name} • Module ${ch.id}`;
+
+  // Load video
+  const videoId = ch.lessons?.[0]?.videoId || 'dQw4w9WgXcQ';
+  document.getElementById('videoWrap').innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+
+  // Load content options
+  const options = [
+    { name: 'Notes', icon: '📝' },
+    { name: 'PYQs', icon: '📜' },
+    { name: 'Quiz', icon: '🧩' },
+    { name: 'Animations', icon: '💡' },
+  ];
+  document.getElementById('contentOptions').innerHTML = options.map(opt => `
+    <div class="content-card content-item">
+      <span class="icon">${opt.icon}</span>
+      <h3 style="font-size:1rem">${opt.name}</h3>
+    </div>
+  `).join('');
+});
+</script>
+
+</body>
+</html>

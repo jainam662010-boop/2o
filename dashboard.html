@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard — Class 10Edu</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="page-layout">
+  <aside class="sidebar" id="sb"></aside>
+  <main class="main-area">
+    <header class="header">
+      <h1>Dashboard</h1>
+      <p style="color:var(--ink-secondary)">Welcome back! Let's continue your learning journey.</p>
+    </header>
+
+    <div class="content-card" style="margin-bottom:24px">
+      <h2>Continue Learning</h2>
+      <p style="color:var(--ink-secondary);margin-top:8px">Pick up where you left off in Social Science.</p>
+      <button class="btn btn-primary" style="margin-top:20px">Go to Chapter</button>
+    </div>
+
+    <h2 style="margin-top:40px;margin-bottom:20px">Your Subjects</h2>
+    <div class="dashboard-grid" id="subjGrid">
+      <!-- Subjects will be populated by JS -->
+    </div>
+  </main>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/security.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  App.initPage('dashboard');
+  const data = await App.loadData();
+  const grid = document.getElementById('subjGrid');
+
+  grid.innerHTML = data.subjects.map(s => {
+    const pct = App.getSubjPct(s.id, s);
+    return `
+      <a href="subject.html?id=${s.id}" class="content-card">
+        <div style="display:flex;align-items:center;gap:16px">
+          <div style="font-size:2rem">${s.icon}</div>
+          <div>
+            <h3 style="font-size:1.1rem">${VidyaSec.sanitize(s.name)}</h3>
+            <p style="color:var(--ink-secondary);font-size:0.9rem">${pct}% Complete</p>
+          </div>
+        </div>
+      </a>
+    `;
+  }).join('');
+});
+</script>
+
+</body>
+</html>
